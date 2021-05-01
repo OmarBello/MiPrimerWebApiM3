@@ -46,5 +46,34 @@ namespace MiPrimerWebApiM3.Controllers
             context.SaveChanges();
             return new CreatedAtRouteResult("ObtenerLibro", new { id = libro.Id }, libro);
         }
+
+        [HttpPut("{id}")]
+        public ActionResult Put(int id, [FromBody] Libro libro)
+        {
+            if(id != libro.Id)
+            {
+                return BadRequest();
+            }
+
+            context.Entry(libro).State = EntityState.Modified;
+            context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Libro> Delete(int id)
+        {
+            var libro = context.Libros.FirstOrDefault(x => x.Id == id);
+
+            if(libro == null)
+            {
+                return NotFound();
+            }
+
+            context.Libros.Remove(libro);
+            context.SaveChanges();
+            return libro;
+        }
+
     }
 }
